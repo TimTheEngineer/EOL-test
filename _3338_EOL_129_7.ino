@@ -2889,10 +2889,10 @@ void maxTimerUpdate() {
     readTimer = 0;
     Serial.println("mt");
     sendTestStatus();
-    if (priorityStatus) {
-      priorityStatus = false; // cancel the priority ststus as the message has been sent
-      Serial.println("ps");
-    }
+//    if (priorityStatus) {
+//      priorityStatus = false; // cancel the priority ststus as the message has been sent
+//      Serial.println("ps");
+//    }
   }
   else if (errorState == 15) {
     balanceMachine.transitionTo(balanceRead);
@@ -3133,7 +3133,7 @@ void balanceReadExit() {
       if (testStatus == 'C' || testStatus == 'Z' || testStatus == 'J') { // only allow transition on to D if stream has stopped
         testStatus = 'D'; // update status if normal dispense - not if over 7s as status would be F or G
         Serial.println("stat D");
-        priorityStatus; // make sure this gets sent and not overwritten
+        priorityStatus = true; // make sure this gets sent and not overwritten
         sendTestStatus();
       }
     }
@@ -3506,6 +3506,10 @@ void sendTestStatus() {
     //  if (weight == 0) Serial.println(float(averageWeight)/10000,4);
     //  else Serial.println(float(weight)/10000,4);
     if (testSeq >= 11) readNum++;
+  }
+    if (priorityStatus) {
+    priorityStatus = false; // cancel the priority ststus as the message has been sent
+    Serial.println("ps");
   }
 }
 
